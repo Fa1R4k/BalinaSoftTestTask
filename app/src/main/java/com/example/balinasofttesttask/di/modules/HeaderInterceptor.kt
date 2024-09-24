@@ -4,7 +4,6 @@ import com.example.balinasofttesttask.data.source.TokenDataSource
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
-import java.io.IOException
 import javax.inject.Inject
 
 class HeaderInterceptor @Inject constructor(
@@ -15,7 +14,9 @@ class HeaderInterceptor @Inject constructor(
             prefs.getAccessToken()
         }
         val request = chain.request().newBuilder()
-        request.addHeader("Access-Token", accessToken)
-            return chain.proceed(request.build())
+        if (accessToken.isNotEmpty()) {
+            request.addHeader("Access-Token", accessToken)
+        }
+        return chain.proceed(request.build())
     }
 }
